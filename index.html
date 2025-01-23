@@ -3,7 +3,7 @@
         <head>
                 <meta charset="UTF-8" />
                 <title>Hueveras de cartón 2</title>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/pha>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.min.js">
                 <script>
                         let canvas_w = 800;
                         let canvas_h = 450;
@@ -28,7 +28,7 @@
 
                         function crea ()
                         {
-                                rect = this.add.rectangle(400, 225, 32,>
+                                rect = this.add.rectangle(400, 225, 32, 0x00ff00)>
                                 cursor = this.input.keyboard.createCursorKeys();
                         }
 
@@ -50,7 +50,7 @@
                                 rect.x = Phaser.Math.Clamp(rect.x, 0, canvas_w);
                                 rect.y = Phaser.Math.Clamp(rect.y, 0, canvas_h);
                         }
-                        }
+                        
                 </script>
         </head>
         <body>
