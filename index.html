@@ -25,10 +25,15 @@
                     function precarga() {
                         this.load.image('huevera', 'huevera.png');
                         this.load.image('huevo', 'huevo.png');
+			this.load.image('fondo', 'fondo.png');
+                	this.load.image('cinta', 'cinta.png');
                     }
 
                     function crea() {
-                        huevera_b = this.add.image(100, 100, 'huevera');
+			this.add.image(canvas_w / 2, canvas_h / 2, 'fondo').setOrigin(.5, .5).setScale(1.5);
+                	this.add.image(150, canvas_h / 2, 'cinta').setOrigin(0, .5).setScale(.5);
+                        
+			huevera_b = this.add.image(100, 100, 'huevera');
                         huevera_b.setScale(.5);
                         huevera_b.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
 
