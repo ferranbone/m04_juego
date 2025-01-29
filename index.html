@@ -57,16 +57,17 @@
                         huevo_d.setScale(.5);
                         huevo_d.setTint(Phaser.Display.Color.GetColor(255, 215, 0));
 
-                        huevo_b.on('pointerdown', () => {
-                            console.log('Huevo blanco clicado');
+			huevo_b.setInteractive();
+                        huevo_b.on('pointerdown', function () {
+                            console.log("Huevo blanco clicado");
                         });
-
-                        huevo_m.on('pointerdown', () => {
-                            console.log('Huevo marrón clicado');
+			huevo_m.setInteractive();
+                        huevo_m.on('pointerdown', function () {
+                            console.log("Huevo marrón clicado");
                         });
-
-                        huevo_d.on('pointerdown', () => {
-                            console.log('Huevo dorado clicado');
+			huevo_d.setInteractive();
+                        huevo_d.on('pointerdown', function () {
+                            console.log("Huevo dorado clicado");
                         });
                     }
 
