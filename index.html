@@ -105,8 +105,8 @@
                     });
 			    this.time.addEvent({
 				    delay: 2000,
-				    callback: () => generarHuevoAleatorio(scene),
-				    callbackScope: scene,
+				    callback: () => generarHuevoAleatorio(this),
+				    callbackScope: this,
 				    loop: true
 			    });
 		    }
