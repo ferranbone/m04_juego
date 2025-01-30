@@ -24,6 +24,7 @@
 			        let huevo_b, huevo_m, huevo_d;
 				let huevo_shadow;
 				let fondo, cinta;
+				let huevos = [];
 
                     function precarga() {
                         this.load.image('huevera', 'huevera.png');
@@ -102,6 +103,42 @@
 				    huevo_shadow.x = -10000;
 				    huevo_shadow.y = -10000;
                     });
+			    this.time.addEvent({
+				    delay: 2000,
+				    callback: generarHuevo,
+				    callbakeScope: this,
+				    loop: true
+			    });
+		    }
+
+		function generarHuevoAleatorio() {
+	                let colores = ['blanco', 'marron', 'dorado'];
+	                let colorSeleccionado = colores[Math.floor(Math.random() * colores.length)];
+	                let huevoNuevo = this.add.image(Math.random() * (canvas_w - 50), -50, 'huevo');
+	                huevoNuevo.setScale(0.5);
+	                
+	                if (colorSeleccionado === 'blanco') {
+	                    huevoNuevo.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
+	                } else if (colorSeleccionado === 'marron') {
+	                    huevoNuevo.setTint(Phaser.Display.Color.GetColor(139, 69, 19));
+	                } else {
+	                    huevoNuevo.setTint(Phaser.Display.Color.GetColor(255, 215, 0));
+	                }
+	
+	                let velocidad = Math.random() * 2 + 1; // Velocidad entre 1 y 3
+	
+	                this.tweens.add({
+	                    targets: huevoNuevo,
+	                    y: canvas_h + 50, 
+	                    duration: velocidad * 3000, 
+	                    ease: 'Linear',
+	                    onComplete: function () {
+	                        huevoNuevo.destroy();
+	                    }
+	                });
+	
+	                huevos.push(huevoNuevo);
+            }
 
                     function actualiza() {
                         
