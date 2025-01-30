@@ -105,8 +105,8 @@
                     });
 			    this.time.addEvent({
 				    delay: 2000,
-				    callback: () => generarHuevoAleatorio(this),
-				    callbackScope: this,
+				    callback: () => generarHuevoAleatorio(scene),
+				    callbackScope: scene,
 				    loop: true
 			    });
 		    }
@@ -114,7 +114,7 @@
 		function generarHuevoAleatorio(scene) {
 	                let colores = ['blanco', 'marron', 'dorado'];
 	                let colorSeleccionado = colores[Math.floor(Math.random() * colores.length)];
-	                let huevoNuevo = this.add.image(Math.random() * (canvas_w - 50), -50, 'huevo');
+	                let huevoNuevo = scene.add.image(Math.random() * (canvas_w - 50), -50, 'huevo');
 	                huevoNuevo.setScale(0.5);
 	                
 	                if (colorSeleccionado === 'blanco') {
