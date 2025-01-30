@@ -8,6 +8,7 @@
                         let canvas_w = 800;
                         let canvas_h = 450;
                         let config = {
+				type: Phaser.Auto,
                                 width: canvas_w,
                                 height: canvas_h,
                                 scene: {
@@ -21,8 +22,8 @@
 
 			        let huevera_b, huevera_m, huevera_d;
 			        let huevo_b, huevo_m, huevo_d;
-				let fondo;
-				let cinta;
+				let huevo_shadow;
+				let fondo, cinta;
 
                     function precarga() {
                         this.load.image('huevera', 'huevera.png');
@@ -53,7 +54,7 @@
                         huevo_b.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
 
 			huevo_shadow = this.add.image(-10000, -1000, 'huevo');
-                        huevo_m.setTint("#000000");
+			huevo_shadow.setTint(Phaser.Display.Color.GetColor(0, 0, 0));
 			huevo_shadow.alpha = .5;
 			    
                         huevo_m = this.add.image(550, 300, 'huevo');
@@ -100,7 +101,7 @@
 				    object.setScale(1);
 				    huevo_shadow.x = -10000;
 				    huevo_shadow.y = -10000;
-                    }
+                    });
 
                     function actualiza() {
                         
