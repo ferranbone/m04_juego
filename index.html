@@ -34,8 +34,8 @@
                     }
 
                     function crea() {
-			fondo = this.add.image(canvas_w / 2, canvas_h / 2, 'fondo').setOrigin(.5, .5).setScale(1.5);
-                	cinta = this.add.image(150, canvas_h / 2, 'cinta').setOrigin(0, .5).setScale(.5);
+			fondo = this.add.image(canvas_w / 2, canvas_h / 2, 'fondo').setOrigin(.5, .5).setDisplaySize(canvas_w,canvas_h);
+                	cinta = this.add.image(150, canvas_h / 2, 'cinta').setOrigin(.7, .5).setScale(1, canvas_h);
 	
 			    
 			huevera_b = this.add.image(100, 100, 'huevera');
@@ -72,14 +72,14 @@
 				huevo_shadow.x = this.x + 8;
 				huevo_shadow.y = this.y + 8;
 				this.setScale(1.3);
-                        }, huevo_b);
+                        });
 			huevo_m.setInteractive({ draggable:true });
                         huevo_m.on('pointerdown', function () {
                             console.log("Huevo marrón clicado");
 				huevo_shadow.x = this.x + 8;
 				huevo_shadow.y = this.y + 8;
 				this.setScale(1.3);
-                        }, huevo_m);
+                        });
 			huevo_d.setInteractive({ draggable:true });
                         huevo_d.on('pointerdown', function () {
                             console.log("Huevo dorado clicado");
@@ -87,14 +87,21 @@
 				huevo_shadow.x = this.x + 8;
 				huevo_shadow.y = this.y + 8;
 				this.setScale(1.3);
-                        }, huevo_d);
+                        });
+				this.time.addEvent({
+				    delay: 2000,
+				    callback: generarHuevoAleatorio,
+				    callbackScope: this,
+				    loop: true
+			    });
+
 			    this.input.on('drag', function (pointer, object, x , y) {
 				    object.x = x;
 				    object.y = y;
 				    huevo_shadow.x = x + 8;
 				    huevo_shadow.y = y + 8;
 
-				    if (huevera_m && Phaser.Geom.Intersects.RectangleToRectangle(huevera_m.getBounds(), object.getBounds())){
+				    if (Phaser.Geom.Intersects.RectangleToRectangle(huevera_m.getBounds(), object.getBounds())){
 				    	console.log("Huevo dentro de huevera!!!");
 				    }
 			    });
@@ -102,19 +109,17 @@
 				    object.setScale(1);
 				    huevo_shadow.x = -10000;
 				    huevo_shadow.y = -10000;
+				    object.isDragging = false;
                     });
-			    this.time.addEvent({
-				    delay: 2000,
-				    callback: () => generarHuevoAleatorio(this),
-				    callbackScope: this,
-				    loop: true
-			    });
-		    }
+			    		    }
 
-		function generarHuevoAleatorio(scene) {
+		function generarHuevoAleatorio() {
+			let scene = this;
 	                let colores = ['blanco', 'marron', 'dorado'];
 	                let colorSeleccionado = colores[Math.floor(Math.random() * colores.length)];
-	                let huevoNuevo = scene.add.image(Math.random() * (canvas_w - 50), -50, 'huevo');
+
+
+	                let huevoNuevo = this.add.image(Math.random() * (canvas_w - 50), -50, 'huevo');
 	                huevoNuevo.setScale(0.5);
 	                
 	                if (colorSeleccionado === 'blanco') {
@@ -124,10 +129,13 @@
 	                } else {
 	                    huevoNuevo.setTint(Phaser.Display.Color.GetColor(255, 215, 0));
 	                }
+
+			huevoNuevo.setInteractive({ draggable: true});
+			huevoNuevo.isDragging = false;
 	
-	                let velocidad = Math.random() * 2 + 1;
+	                let velocidad = Math.random() * 2 + 1; // Velocidad entre 1 y 3
 	
-	                scene.tweens.add({
+	                huevoNuevo.cayendo = this.tweens.add({
 	                    targets: huevoNuevo,
 	                    y: canvas_h + 50, 
 	                    duration: velocidad * 3000, 
@@ -136,6 +144,11 @@
 	                        huevoNuevo.destroy();
 	                    }
 	                });
+
+			huevoNuevo.on('dragstart', function() {
+				huevoNuevo.isDragging = true;
+				huevoNuevo.cayendo.paused = true;
+			});
 	
 	                huevos.push(huevoNuevo);
             }
