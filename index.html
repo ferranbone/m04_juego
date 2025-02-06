@@ -35,7 +35,7 @@
 
                     function crea() {
 			fondo = this.add.image(canvas_w / 2, canvas_h / 2, 'fondo').setOrigin(.5, .5).setDisplaySize(canvas_w,canvas_h);
-                	cinta = this.add.image(150, canvas_h / 2, 'cinta').setOrigin(.7, .5).setScale(1, canvas_h);
+                	cinta = this.add.image(150, canvas_h / 2, 'cinta').setOrigin(.7, .5).setScale(.5, canvas_h);
 	
 			    
 			huevera_b = this.add.image(100, 100, 'huevera');
@@ -49,45 +49,12 @@
                         huevera_d = this.add.image(100, 350, 'huevera');
                         huevera_d.setScale(.5);
                         huevera_d.setTint(Phaser.Display.Color.GetColor(255, 215, 0));
-
-                        huevo_b = this.add.image(450, 300, 'huevo');
-                        huevo_b.setScale(.5);
-                        huevo_b.setTint(Phaser.Display.Color.GetColor(255, 255, 255));
-
+                        
 			huevo_shadow = this.add.image(-10000, -1000, 'huevo');
 			huevo_shadow.setTint(Phaser.Display.Color.GetColor(0, 0, 0));
 			huevo_shadow.alpha = .5;
 			    
-                        huevo_m = this.add.image(550, 300, 'huevo');
-                        huevo_m.setScale(.5);
-                        huevo_m.setTint(Phaser.Display.Color.GetColor(139, 69, 19));
-
-                        huevo_d = this.add.image(650, 300, 'huevo');
-                        huevo_d.setScale(.5);
-                        huevo_d.setTint(Phaser.Display.Color.GetColor(255, 215, 0));
-
-			huevo_b.setInteractive({ draggable:true });
-                        huevo_b.on('pointerdown', function () {
-                            console.log("Huevo blanco clicado");
-				huevo_shadow.x = this.x + 8;
-				huevo_shadow.y = this.y + 8;
-				this.setScale(1.3);
-                        });
-			huevo_m.setInteractive({ draggable:true });
-                        huevo_m.on('pointerdown', function () {
-                            console.log("Huevo marrón clicado");
-				huevo_shadow.x = this.x + 8;
-				huevo_shadow.y = this.y + 8;
-				this.setScale(1.3);
-                        });
-			huevo_d.setInteractive({ draggable:true });
-                        huevo_d.on('pointerdown', function () {
-                            console.log("Huevo dorado clicado");
-
-				huevo_shadow.x = this.x + 8;
-				huevo_shadow.y = this.y + 8;
-				this.setScale(1.3);
-                        });
+                        
 				this.time.addEvent({
 				    delay: 2000,
 				    callback: generarHuevoAleatorio,
@@ -101,14 +68,35 @@
 				    huevo_shadow.x = x + 8;
 				    huevo_shadow.y = y + 8;
 
-				    if (Phaser.Geom.Intersects.RectangleToRectangle(huevera_m.getBounds(), object.getBounds())){
-				    	console.log("Huevo dentro de huevera!!!");
-				    }
 			    });
 			    this.input.on('dragend', function (pointer, object, x , y) {
-				    object.setScale(1);
-				    huevo_shadow.x = -10000;
-				    huevo_shadow.y = -10000;
+				    let correcto = false;
+
+				    let hueveras = [
+					    { object: huevera_b, color: 0xFFFFFF },
+					    { object: huevera_m, color: 0x8B4513 },
+					    { object: huevera_d, color: 0xFFD700 }
+					    ];
+				    for (let i = 0; i < hueveras.length; i++) {
+					    let huevera = hueveras[i];
+
+					    if (Phaser.Geom.Intersects.RectangleToRectangle(huevera.object.getBounds(), object.getBounds())) {
+						    if (object.tintTopLeft === huevera.color) {
+							    console.log("huevera correcta");
+							    correcto = true;
+							    object.x = huevera.object.x;
+							    object.y = huevera.object.y;
+							    object.setScale(.4);
+						    }
+					    }
+				    }
+
+				    if (!correcto) {
+					    console.log("huevera incorrecta");
+					    object.setScale(1);
+					    huevo_shadow.x = -10000;
+					    huevo_shadow.y = -10000;
+				    }
 				    object.isDragging = false;
                     });
 			    		    }
