@@ -7,6 +7,9 @@
                 <script>
                         let canvas_w = 800;
                         let canvas_h = 450;
+			let gameOver = false;
+			let fondoMusica, gameOverMusica, sonidoAgarre, sonidoCorrecta, sonidoIncorrecta;
+
                         let config = {
 				type: Phaser.AUTO,
                                 width: canvas_w,
@@ -31,6 +34,12 @@
                         this.load.image('huevo', 'huevo.png');
 			this.load.image('fondo', 'fondo.png');
                 	this.load.image('cinta', 'cinta.png');
+
+			this.load.audio('musica_fondo', 'musica_fondo.mp3');
+			this.load.audio('musica_gameover', 'musica_gameover.mp3');
+			this.load.audio('sonido_agarre', 'agarre.mp3');
+			this.load.audio('sonido_correcto', 'correcto.mp3');
+			this.load.audio('sonido_incorrecto', 'incorrecto.mp3');
                     }
 
                     function crea() {
@@ -54,6 +63,13 @@
 			huevo_shadow.setTint(Phaser.Display.Color.GetColor(0, 0, 0));
 			huevo_shadow.alpha = .5;
 			    
+			musicaFondo = this.sound.add('musica_fondo', { loop: true, volume: 0.5});
+			    gameOverFondo = this.sound.add('musica_gameover', { loop: false, volume: 0.8 });
+			    sonidoAgarre = this.sound.add('sonido_agarre', { volume: 1});
+			    sonidoCorrecto = this.sound.add('sonido_correcto', { volume: 1});
+			    sonidoIncorrecto = this.sound.add('sonido_incorrecto', { volume: 1});
+
+			    musicaFondo.play();
                         
 				this.time.addEvent({
 				    delay: 2000,
@@ -63,11 +79,11 @@
 			    });
 
 			    this.input.on('drag', function (pointer, object, x , y) {
+				    sonidoAgarre.play();
 				    object.x = x;
 				    object.y = y;
 				    huevo_shadow.x = x + 8;
-				    huevo_shadow.y = y + 8;
-
+				    huevo_shadow.y = y + 8;				    
 			    });
 			    this.input.on('dragend', function (pointer, object, x , y) {
 				    let correcto = false;
@@ -83,6 +99,7 @@
 					    if (Phaser.Geom.Intersects.RectangleToRectangle(huevera.object.getBounds(), object.getBounds())) {
 						    if (object.tintTopLeft === huevera.color) {
 							    console.log("huevera correcta");
+							    sonidoCorrecto.play();
 							    correcto = true;
 							    object.x = huevera.object.x;
 							    object.y = huevera.object.y;
@@ -92,6 +109,7 @@
 				    }
 
 				    if (!correcto) {
+					    sonidoIncorrecto.play();
 					    console.log("huevera incorrecta");
 					    object.setScale(1);
 					    huevo_shadow.x = -10000;
@@ -129,17 +147,27 @@
 	                    duration: velocidad * 3000, 
 	                    ease: 'Linear',
 	                    onComplete: function () {
+				    if (!gameOver){
+					    darGameOver(scene);
+				    }
 	                        huevoNuevo.destroy();
 	                    }
 	                });
 
-			huevoNuevo.on('dragstart', function() {
+			huevoNuevo.on('dragstart', function(){
+				sonidoAgarre.play();
 				huevoNuevo.isDragging = true;
 				huevoNuevo.cayendo.paused = true;
 			});
-	
+			
 	                huevos.push(huevoNuevo);
             }
+			function darGameOver(scene) {
+				musicaFondo.stop();
+				gameOverFondo.play();
+				gameOver = true;
+				console.log("Game Over");
+			}
 
                     function actualiza() {
                         
